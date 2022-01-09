@@ -1,0 +1,6 @@
+name: ${project.name}
+description: ${project.description}
+version: ${project.version}
+author: regulad # fixme
+
+main: ${project.parent.groupId}.bungee.BungeePlugin
