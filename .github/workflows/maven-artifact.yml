@@ -4,10 +4,11 @@
 name: Java CI with Maven and Artifact
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - "*"
-    branches: [ master ]
+    branches: [ "**" ]
   pull_request:
     branches: [ master ]
 
@@ -21,11 +22,11 @@ jobs:
           path: |
             ~/.m2
           key: depCache-${{ hashFiles('./pom.xml') }}
-      - name: Set up Java 8
+      - name: Set up Java
         uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
-          java-version: '8'
+          java-version: '17'
           cache: 'maven'
       - name: Build with Maven
         run: mvn -B package
