@@ -1,4 +1,4 @@
-package xyz.regulad.spigotbungeecombolegacytemplate.bungee;
+package xyz.regulad.superlegacycombo.bungee;
 
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -8,7 +8,7 @@ import net.md_5.bungee.config.YamlConfiguration;
 import org.bstats.bungeecord.Metrics;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import xyz.regulad.spigotbungeecombolegacytemplate.bungee.api.BungeeAPI;
+import xyz.regulad.superlegacycombo.bungee.api.BungeeAPI;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,10 +19,10 @@ public class BungeePlugin extends Plugin {
     @Getter
     private static @Nullable BungeePlugin instance;
     @Getter
+    private final @NotNull BungeeAPI bungeeAPI = new BungeeAPI(this);
+    @Getter
     private @Nullable Metrics metrics;
     private @Nullable Configuration configuration;
-    @Getter
-    private final @NotNull BungeeAPI bungeeAPI = new BungeeAPI(this);
 
     @Override
     public void onEnable() {
@@ -32,7 +32,7 @@ public class BungeePlugin extends Plugin {
         if (this.getConfig() == null) this.saveDefaultConfig();
         if (this.getConfig() == null) this.getLogger().warning("Couldn't load configuration!");
         // Setup bStats metrics
-        this.metrics = new Metrics(this, 13872); // TODO: Replace this in your plugin!
+        this.metrics = new Metrics(this, 13901); // TODO: Replace this in your plugin!
     }
 
     @Override

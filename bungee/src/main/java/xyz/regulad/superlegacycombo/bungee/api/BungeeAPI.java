@@ -1,8 +1,8 @@
-package xyz.regulad.spigotbungeecombolegacytemplate.bungee.api;
+package xyz.regulad.superlegacycombo.bungee.api;
 
 import org.jetbrains.annotations.NotNull;
-import xyz.regulad.spigotbungeecombolegacytemplate.bungee.BungeePlugin;
-import xyz.regulad.spigotbungeecombolegacytemplate.common.api.CommonAPI;
+import xyz.regulad.superlegacycombo.bungee.BungeePlugin;
+import xyz.regulad.superlegacycombo.common.api.CommonAPI;
 
 public class BungeeAPI extends CommonAPI {
     private final BungeePlugin bungeePlugin;

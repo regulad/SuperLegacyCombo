@@ -1,8 +1,8 @@
-package xyz.regulad.spigotbungeecombolegacytemplate.spigot.api;
+package xyz.regulad.superlegacycombo.spigot.api;
 
 import org.jetbrains.annotations.NotNull;
-import xyz.regulad.spigotbungeecombolegacytemplate.common.api.CommonAPI;
-import xyz.regulad.spigotbungeecombolegacytemplate.spigot.SpigotPlugin;
+import xyz.regulad.superlegacycombo.common.api.CommonAPI;
+import xyz.regulad.superlegacycombo.spigot.SpigotPlugin;
 
 public class SpigotAPI extends CommonAPI {
     private final SpigotPlugin spigotPlugin;

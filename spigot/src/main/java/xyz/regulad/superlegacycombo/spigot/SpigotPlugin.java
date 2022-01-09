@@ -1,19 +1,19 @@
-package xyz.regulad.spigotbungeecombolegacytemplate.spigot;
+package xyz.regulad.superlegacycombo.spigot;
 
 import lombok.Getter;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import xyz.regulad.spigotbungeecombolegacytemplate.spigot.api.SpigotAPI;
+import xyz.regulad.superlegacycombo.spigot.api.SpigotAPI;
 
 public class SpigotPlugin extends JavaPlugin {
     @Getter
     private static @Nullable SpigotPlugin instance;
     @Getter
-    private @Nullable Metrics metrics;
-    @Getter
     private final @NotNull SpigotAPI spigotAPI = new SpigotAPI(this);
+    @Getter
+    private @Nullable Metrics metrics;
 
     @Override
     public void onEnable() {
@@ -22,7 +22,7 @@ public class SpigotPlugin extends JavaPlugin {
         // Setup config
         this.saveDefaultConfig();
         // Setup bStats metrics
-        this.metrics = new Metrics(this, 13871); // TODO: Replace this in your plugin!
+        this.metrics = new Metrics(this, 13900); // TODO: Replace this in your plugin!
     }
 
     @Override
