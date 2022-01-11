@@ -84,6 +84,23 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--Shading-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.3.0-SNAPSHOT</version>
+                <configuration>
+                    <minimizeJar>true</minimizeJar>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!--Development Tools-->
             <plugin>
                 <groupId>org.projectlombok</groupId>
@@ -130,13 +147,6 @@
             <artifactId>annotations</artifactId>
             <version>23.0.0</version>
             <scope>provided</scope>
-        </dependency>
-        <!--Analytics-->
-        <dependency>
-            <groupId>org.bstats</groupId>
-            <artifactId>bstats-base</artifactId>
-            <version>2.2.1</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

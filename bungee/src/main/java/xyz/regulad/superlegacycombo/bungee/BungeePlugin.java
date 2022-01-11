@@ -1,6 +1,8 @@
 package xyz.regulad.superlegacycombo.bungee;
 
 import lombok.Getter;
+import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -8,39 +10,56 @@ import net.md_5.bungee.config.YamlConfiguration;
 import org.bstats.bungeecord.Metrics;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import xyz.regulad.superlegacycombo.bungee.api.BungeeAPI;
+import xyz.regulad.superlegacycombo.common.api.CommonAPI;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 
-public class BungeePlugin extends Plugin {
+public class BungeePlugin extends Plugin implements CommonAPI<ProxiedPlayer> {
     @Getter
     private static @Nullable BungeePlugin instance;
-    @Getter
-    private final @NotNull BungeeAPI bungeeAPI = new BungeeAPI(this);
+
     @Getter
     private @Nullable Metrics metrics;
-    private @Nullable Configuration configuration;
+    private @Nullable Configuration config;
+
+    @Getter
+    private @Nullable BungeeAudiences bungeeAudiences;
 
     @Override
     public void onEnable() {
         // Setup instance access
         instance = this;
+        CommonAPI.setInstance(this);
         // Setup config
         if (this.getConfig() == null) this.saveDefaultConfig();
         if (this.getConfig() == null) this.getLogger().warning("Couldn't load configuration!");
+        // Setup adventure
+        this.bungeeAudiences = BungeeAudiences.create(this);
         // Setup bStats metrics
         this.metrics = new Metrics(this, 13901); // TODO: Replace this in your plugin!
     }
 
     @Override
     public void onDisable() {
+        // Discard instance access
+        instance = null;
+        CommonAPI.setInstance(null);
+        // Discard instance access
+        this.config = null;
+        // Discard adventure
+        if (this.bungeeAudiences != null) {
+            this.bungeeAudiences.close();
+        }
+        // Discard bStats metrics
         this.metrics = null;
-        this.configuration = null;
     }
 
+    /**
+     * Saves the default configuration stored in the plugin to the disk.
+     */
     public void saveDefaultConfig() {
         if (!this.getDataFolder().exists()) this.getDataFolder().mkdir();
 
@@ -68,19 +87,19 @@ public class BungeePlugin extends Plugin {
                 defaultConfiguration = configurationProvider.load(defaultConfig); // Will this break? It is barely documented.
             }
 
-            this.configuration = configurationProvider.load(new File(this.getDataFolder(), "config.yml"), defaultConfiguration);
+            this.config = configurationProvider.load(new File(this.getDataFolder(), "config.yml"), defaultConfiguration);
         } catch (IOException exception) {
-            this.configuration = null;
+            this.config = null;
         }
     }
 
     /**
      * Provides the plugin's {@link Configuration}, reloading it if it has not yet been loaded.
      *
-     * @return The loaded {@link Configuration}, which may be null if an exception occurs.
+     * @return The loaded {@link Configuration}, which may be {@code null} if an exception occurs.
      */
     public @Nullable Configuration getConfig() {
-        if (this.configuration == null) this.reloadConfig();
-        return this.configuration;
+        if (this.config == null) this.reloadConfig();
+        return this.config;
     }
 }
