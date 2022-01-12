@@ -13,9 +13,88 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
+    <build>
+        <plugins>
+            <!--Shading-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.3.0-SNAPSHOT</version>
+                <configuration>
+                    <minimizeJar>true</minimizeJar>
+                    <relocations>
+                        <relocation>
+                            <pattern>org.bstats</pattern>
+                            <shadedPattern>${project.parent.groupId}.dep.org.bstats</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.zaxxer</pattern>
+                            <shadedPattern>${project.parent.groupId}.dep.com.zaxxer</shadedPattern>
+                        </relocation>
+                        <relocation> <!--HikariCP needs this-->
+                            <pattern>org.slf4j</pattern>
+                            <shadedPattern>${project.parent.groupId}.dep.org.slf4j</shadedPattern>
+                        </relocation>
+                        <relocation> <!--HikariCP needs this-->
+                            <pattern>com.mysql</pattern>
+                            <shadedPattern>${project.parent.groupId}.dep.com.mysql</shadedPattern>
+                        </relocation>
+                        <relocation> <!--HikariCP needs this-->
+                            <pattern>google.protobuf</pattern>
+                            <shadedPattern>${project.parent.groupId}.dep.google.protobuf</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <!--Common-->
+        <!--Do NOT bump these! These are determined by the weakest chain in the link (Spigot)-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>17.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--Shaded-->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>4.0.3</version> <!--Need Java 8 support-->
+        </dependency>
+        <dependency> <!--Velocity doesn't include this... WTF?-->
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.25</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-base</artifactId>
+            <version>2.2.1</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 </project>

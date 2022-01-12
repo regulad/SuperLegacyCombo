@@ -1,1 +1,9 @@
 version: 1 # Don't touch this! For future use.
+
+db:
+  enabled: false
+  host: "localhost"
+  port: 3306
+  database: "superlegacycombo"
+  username: "slc_user"
+  password: "slc17385"

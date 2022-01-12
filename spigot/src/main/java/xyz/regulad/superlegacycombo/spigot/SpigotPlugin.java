@@ -7,12 +7,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 import xyz.regulad.superlegacycombo.common.api.CommonAPI;
+import xyz.regulad.superlegacycombo.common.db.MySQL;
 
 public class SpigotPlugin extends JavaPlugin implements CommonAPI<Player> {
     @Getter
     private static @Nullable SpigotPlugin instance;
     @Getter
     private @Nullable Metrics metrics;
+    @Getter
+    private @Nullable MySQL<Player> mySQL;
 
     @Getter
     private @Nullable BukkitAudiences bukkitAudiences;
@@ -28,6 +31,21 @@ public class SpigotPlugin extends JavaPlugin implements CommonAPI<Player> {
         this.bukkitAudiences = BukkitAudiences.create(this);
         // Setup bStats metrics
         this.metrics = new Metrics(this, 13900); // TODO: Replace this in your plugin!
+        // Setup MySQL
+        if (this.getConfig().getBoolean("db.enabled", false)) {
+            this.mySQL = new MySQL<>(
+                    this.getConfig().getString("db.host"),
+                    this.getConfig().getInt("db.port"),
+                    this.getConfig().getString("db.database"),
+                    this.getConfig().getString("db.username"),
+                    this.getConfig().getString("db.password"),
+                    this
+            );
+        }
+        if (this.mySQL != null) {
+            this.mySQL.setupTable();
+            this.mySQL.connect();
+        }
     }
 
     @Override
@@ -42,5 +60,10 @@ public class SpigotPlugin extends JavaPlugin implements CommonAPI<Player> {
         }
         // Discard bStats metrics
         this.metrics = null;
+        // Discard MySQL
+        if (this.mySQL != null) {
+            this.mySQL.close();
+        }
+        this.mySQL = null;
     }
 }

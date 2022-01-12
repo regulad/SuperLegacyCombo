@@ -11,6 +11,7 @@ import org.bstats.bungeecord.Metrics;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.regulad.superlegacycombo.common.api.CommonAPI;
+import xyz.regulad.superlegacycombo.common.db.MySQL;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +21,8 @@ import java.nio.file.Files;
 public class BungeePlugin extends Plugin implements CommonAPI<ProxiedPlayer> {
     @Getter
     private static @Nullable BungeePlugin instance;
+    @Getter
+    private @Nullable MySQL<ProxiedPlayer> mySQL;
 
     @Getter
     private @Nullable Metrics metrics;
@@ -40,6 +43,21 @@ public class BungeePlugin extends Plugin implements CommonAPI<ProxiedPlayer> {
         this.bungeeAudiences = BungeeAudiences.create(this);
         // Setup bStats metrics
         this.metrics = new Metrics(this, 13901); // TODO: Replace this in your plugin!
+        // Setup MySQL
+        if (this.getConfig().getBoolean("db.enabled", false)) {
+            this.mySQL = new MySQL<>(
+                    this.getConfig().getString("db.host"),
+                    this.getConfig().getInt("db.port"),
+                    this.getConfig().getString("db.database"),
+                    this.getConfig().getString("db.username"),
+                    this.getConfig().getString("db.password"),
+                    this
+            );
+        }
+        if (this.mySQL != null) {
+            this.mySQL.setupTable();
+            this.mySQL.connect();
+        }
     }
 
     @Override
@@ -55,6 +73,11 @@ public class BungeePlugin extends Plugin implements CommonAPI<ProxiedPlayer> {
         }
         // Discard bStats metrics
         this.metrics = null;
+        // Discard MySQL
+        if (this.mySQL != null) {
+            this.mySQL.close();
+        }
+        this.mySQL = null;
     }
 
     /**

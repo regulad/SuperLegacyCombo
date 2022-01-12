@@ -1,6 +1,6 @@
 name: ${project.parent.name}
 description: ${project.parent.description}
-version: ${project.project.version}
+version: ${project.parent.version}
 author: regulad # fixme
 
 main: ${project.parent.groupId}.spigot.SpigotPlugin

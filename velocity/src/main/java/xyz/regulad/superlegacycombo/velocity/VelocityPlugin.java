@@ -3,6 +3,7 @@ package xyz.regulad.superlegacycombo.velocity;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
+import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.Player;
@@ -14,6 +15,7 @@ import org.bstats.velocity.Metrics;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.regulad.superlegacycombo.common.api.CommonAPI;
+import xyz.regulad.superlegacycombo.common.db.MySQL;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,7 +40,10 @@ public class VelocityPlugin implements CommonAPI<Player> {
     @Inject
     private @NotNull ProxyServer proxy;
     @Inject
+    @Getter
     private @NotNull Logger logger;
+    @Getter
+    private @Nullable MySQL<Player> mySQL;
 
     @Inject
     private @NotNull Metrics.Factory metricsFactory;
@@ -142,5 +147,32 @@ public class VelocityPlugin implements CommonAPI<Player> {
             e.printStackTrace();
         }
         logger.info("Config version: " + this.config.getNode("version").getInt());
+    }
+
+    @Subscribe
+    public void loadMySQL(final @NotNull ProxyInitializeEvent proxyInitializeEvent) {
+        final @NotNull ConfigurationNode databaseNode = Objects.requireNonNull(this.getConfig()).getNode("db");
+        if (databaseNode.getNode("enabled").getBoolean(false)) {
+            this.mySQL = new MySQL<>(
+                    Objects.requireNonNull(databaseNode.getNode("host").getString()),
+                    databaseNode.getNode("port").getInt(3306),
+                    Objects.requireNonNull(databaseNode.getNode("database").getString()),
+                    Objects.requireNonNull(databaseNode.getNode("username").getString()),
+                    Objects.requireNonNull(databaseNode.getNode("password").getString()),
+                    this
+            );
+        }
+        if (this.mySQL != null) {
+            this.mySQL.setupTable();
+            this.mySQL.connect();
+        }
+    }
+
+    @Subscribe
+    public void discardMySQL(final @NotNull ProxyShutdownEvent proxyShutdownEvent) {
+        if (this.mySQL != null) {
+            this.mySQL.close();
+        }
+        this.mySQL = null;
     }
 }
