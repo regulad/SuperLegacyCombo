@@ -29,10 +29,6 @@
                     <minimizeJar>true</minimizeJar>
                     <relocations>
                         <relocation>
-                            <pattern>net.kyori</pattern>
-                            <shadedPattern>${project.parent.groupId}.dep.net.kyori</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>${project.parent.groupId}.dep.org.bstats</shadedPattern>
                         </relocation>
