@@ -40,7 +40,6 @@
         </pluginRepository>
     </pluginRepositories>
 
-
     <build>
         <defaultGoal>clean install</defaultGoal>
 
