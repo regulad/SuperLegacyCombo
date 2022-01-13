@@ -82,7 +82,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>4.0.3</version> <!--Need Java 8 support-->
+            <version>5.0.1</version> <!--Need Java 8 support-->
         </dependency>
         <dependency> <!--Velocity doesn't include this... WTF?-->
             <groupId>mysql</groupId>
