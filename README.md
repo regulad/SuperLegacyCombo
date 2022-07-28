@@ -8,5 +8,5 @@ Look for `TODO`s and `fixme`s for getting started.
 ## Java Requirements
 
 * PaperSpigot: 1.8
-* Waterfall: 17
-* Velocity: 17
+* Waterfall: 1.8
+* Velocity: 11
